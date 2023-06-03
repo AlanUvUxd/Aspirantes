@@ -31,6 +31,20 @@ namespace Aspirantes.Controllers
             var result = await db.QueryAsync<Aspirante>(query);
             return Ok(result);
         }
+[HttpGet("{id}")]
+public async Task<ActionResult<Aspirante>> GetAspiranteById(int id)
+{
+    using IDbConnection db = new SqlConnection(_connectionString);
+    string query = "SELECT * FROM Aspirantes WHERE Id = @Id";
+    var result = await db.QuerySingleOrDefaultAsync<Aspirante>(query, new { Id = id });
+
+    if (result == null)
+    {
+        return NotFound();
+    }
+
+    return Ok(result);
+}
 
         [HttpPost]
         public async Task<IActionResult> PostAspirante(Aspirante aspirante)
